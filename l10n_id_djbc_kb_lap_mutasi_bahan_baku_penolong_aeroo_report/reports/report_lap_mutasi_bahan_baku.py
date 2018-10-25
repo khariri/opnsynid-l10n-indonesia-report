@@ -29,27 +29,33 @@ class Parser(report_sxw.rml_parse):
             "l10n_id.djbc_kb_lap_mutasi_bahan_baku_penolong")
         no = 1
 
+        #tambahan hariri ini criteria nya
         criteria = [
-            # ("tgl_penerimaan", ">=", self.date_start),
-            # ("tgl_penerimaan", "<=", self.date_end),
-            # ("warehouse_id", "in", self.warehouse_ids)
+            # ("tgl_stock_move", ">=", self.date_start),
+            # ("tgl_stock_move", "<=", self.date_end),
+            ("warehouse_id", "in", self.warehouse_ids)
         ]
-
+        #end        
         data_ids = obj_data.search(self.cr, self.uid, criteria)
 
         if data_ids:
             for data_id in obj_data.browse(self.cr, self.uid, data_ids):
-                product_id = data.product_id
-                product_name = product_id and product_id.name or "-"
-
-                uom_id = data.uom_id
-                uom_name = uom_id and uom_id.name or "-"
-
+                # product_id = data.product_id                
+                # product_name = product_id and product_id.name or "-"
+                # uom_id = data.uom_id
+                # uom_name = uom_id and uom_id.name or "-"
+                kode_barang = data_id.kode_barang or "-"
+                product_id = data_id.product_id
+                # if product_id:
+                #     product_id = "00"
+                # product_name = product_id and data_id.name or "-"
+                uom_id = data_id.uom_id
+                # uom_name = uom_id and data_id.name or "-"
                 res = {
                     "no": no,
-                    "kode_barang": data_id.kode_barang,
-                    "nama_barang": product_name,
-                    "sat": uom_name,
+                    "kode_barang": kode_barang,
+                    "nama_barang": product_id,
+                    "sat": uom_id,
                     "saldo_awal": data_id.saldo_awal,
                     "pemasukan": data_id.pemasukan,
                     "pengeluaran": data_id.pengeluaran,
